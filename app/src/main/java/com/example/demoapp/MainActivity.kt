@@ -40,13 +40,32 @@ class MainActivity : AppCompatActivity() {
         setCurrentIndicators(0)
 
         binding.viewPagerSlider.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback(){
+            ViewPager2.OnPageChangeCallback() {
 
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                setCurrentIndicators(position)
+                setCurrentIndicators(
+                    position
+                )
+                if (position == 0 or 1) {
+                    binding.btnContinue.setText("Continue")
+                }
+                if (position == 2) {
+                    binding.btnContinue.setText("Let’s start")
+                }
             }
         })
+        binding.tvSkip.setOnClickListener {
+            startActivity(Intent(this, Authactivity::class.java))
+        }
+
+
+        binding.btnContinue.setOnClickListener {
+            if (binding.viewPagerSlider.currentItem + 1 < introSliderAdapter.itemCount) {
+                binding.viewPagerSlider.currentItem += 1
+            }
+        }
+
 
     }
 
@@ -56,29 +75,38 @@ class MainActivity : AppCompatActivity() {
             LinearLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
         layoutParams.setMargins(8, 0, 8, 0)
         for (i in indicators.indices) {
-            indicators[i]= ImageView(applicationContext)
+            indicators[i] = ImageView(applicationContext)
             indicators[i].apply {
-                this?.setImageDrawable(ContextCompat.getDrawable(
-                    applicationContext,R.drawable.indicator_inactive
-                ))
-                this?.layoutParams=layoutParams
+                this?.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        applicationContext, R.drawable.indicator_inactive
+                    )
+                )
+                this?.layoutParams = layoutParams
             }
             binding.indicatorContainer.addView(indicators[i])
 
         }
     }
-    private fun setCurrentIndicators(index:Int)
-    {
-        val childCount =binding.indicatorContainer.childCount
-        for (i  in 0 until childCount)
-        {
-            val imageView= binding.indicatorContainer[i] as ImageView
-            if (i==index){
-                imageView.setImageDrawable(ContextCompat.getDrawable(applicationContext,R.drawable.indicator_active))
-            }
-            else
-            {
-                imageView.setImageDrawable(ContextCompat.getDrawable(applicationContext,R.drawable.indicator_inactive))
+
+    private fun setCurrentIndicators(index: Int) {
+        val childCount = binding.indicatorContainer.childCount
+        for (i in 0 until childCount) {
+            val imageView = binding.indicatorContainer[i] as ImageView
+            if (i == index) {
+                imageView.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        applicationContext,
+                        R.drawable.indicator_active
+                    )
+                )
+            } else {
+                imageView.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        applicationContext,
+                        R.drawable.indicator_inactive
+                    )
+                )
 
             }
         }
